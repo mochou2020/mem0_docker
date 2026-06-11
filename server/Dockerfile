@@ -1,4 +1,4 @@
-FROM python:3.12-slim
+FROM docker.m.daocloud.io/python:3.12-slim
 
 WORKDIR /app
 
@@ -7,6 +7,8 @@ COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
+
+COPY ./main_cp.py ./main.py
 
 EXPOSE 8000
 

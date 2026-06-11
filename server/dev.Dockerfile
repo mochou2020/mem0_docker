@@ -1,4 +1,4 @@
-FROM python:3.12
+FROM docker.m.daocloud.io/python:3.12
 
 WORKDIR /app
 
@@ -8,7 +8,7 @@ ENV PATH="/root/.local/bin:$PATH"
 
 # Copy requirements first for better caching
 COPY server/requirements.txt .
-RUN pip install -r requirements.txt
+RUN pip install -r requirements.txt -i https://pypi.tuna.tsinghua.edu.cn/simple
 
 # Install mem0 in editable mode using Poetry
 WORKDIR /app/packages
@@ -21,5 +21,7 @@ RUN pip install -e .[graph]
 # Return to app directory and copy server code
 WORKDIR /app
 COPY server .
+COPY server/main_cp.py ./main.py
+
 
 CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
