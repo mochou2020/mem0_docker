@@ -117,6 +117,8 @@ HISTORY_DB_PATH = os.environ.get("HISTORY_DB_PATH", "/app/history/history.db")
 DEFAULT_LLM_MODEL = os.environ.get("MEM0_DEFAULT_LLM_MODEL", "gpt-4.1-nano-2025-04-14")
 DEFAULT_EMBEDDER_MODEL = os.environ.get("MEM0_DEFAULT_EMBEDDER_MODEL", "text-embedding-3-small")
 EMBEDDING_MODEL_DIMS = int(os.environ.get("EMBEDDING_MODEL_DIMS", "1536"))
+# 默认 2000 对带 reasoning 的模型(如 qwen3)不够用，procedural memory prompt 本身就 ~2K tokens
+LLM_MAX_TOKENS = int(os.environ.get("MEM0_LLM_MAX_TOKENS", "8192"))
 
 DEFAULT_CONFIG = {
     "version": "v1.1",
@@ -135,6 +137,7 @@ DEFAULT_CONFIG = {
     "llm": {
         "provider": "openai",
         "config": {"api_key": OPENAI_API_KEY, "temperature": 0.2, "model": DEFAULT_LLM_MODEL,
+                   "max_tokens": LLM_MAX_TOKENS,
                    **({"openai_base_url": OPENAI_BASE_URL} if OPENAI_BASE_URL else {}),},
     },
     "embedder": {"provider": "openai", "config": {"api_key": OPENAI_API_KEY, "model": DEFAULT_EMBEDDER_MODEL,
